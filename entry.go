@@ -13,6 +13,9 @@ var scanner *bufio.Scanner
 // declare slice to hold recursion values until input has been finished
 var s []int
 
+// declare new type for showing output
+type callbackFunction func(a ...interface{}) (n int, err error)
+
 
 func main() {
 	// assign new `Scanner` type to `scanner`
@@ -36,9 +39,8 @@ func main() {
 	recursion(n)
 
 	// print every element of slice `s`
-	for _, result := range s {
-		fmt.Println(result)
-	}
+	loop(0,len(s), s, fmt.Println)
+
 
 }
 
@@ -68,6 +70,7 @@ func recursion(n int) {
 	recursion(n - 1)
 }
 
+// add function will adds up non-negative integer for a single case
 func add(x int) int {
 
 	// recursion base case
@@ -93,4 +96,20 @@ func add(x int) int {
 
 	// execute recursion
 	return i*i + add(x - 1)
+}
+
+func loop(index int, maxLen int, i interface{}, cb callbackFunction ) {
+	// recursion base case
+	if index == maxLen {
+		return
+	}
+
+	// type switch
+	switch i.(type) {
+	case []int:
+		cb(i.([]int)[index])
+	}
+
+	// execute recursion
+	loop(index + 1, maxLen, i, cb)
 }
